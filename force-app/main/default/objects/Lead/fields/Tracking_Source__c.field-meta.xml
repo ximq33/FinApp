@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomField xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Tracking_Source__c</fullName>
+    <label>Tracking Source</label>
+    <required>false</required>
+    <trackFeedHistory>false</trackFeedHistory>
+    <type>Picklist</type>
+    <valueSet>
+        <restricted>true</restricted>
+        <valueSetDefinition>
+            <sorted>false</sorted>
+            <value>
+                <fullName>Bank Partner</fullName>
+                <default>false</default>
+                <label>Bank Partner</label>
+            </value>
+            <value>
+                <fullName>Mortgage Partner</fullName>
+                <default>false</default>
+                <label>Mortgage Partner</label>
+            </value>
+            <value>
+                <fullName>Social Media</fullName>
+                <default>false</default>
+                <label>Social Media</label>
+            </value>
+        </valueSetDefinition>
+    </valueSet>
+</CustomField>

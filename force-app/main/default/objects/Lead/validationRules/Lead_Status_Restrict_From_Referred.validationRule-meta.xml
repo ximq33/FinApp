@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Status_Restrict_From_Referred</fullName>
+    <active>true</active>
+    <description>Restricts &quot;Referred&quot; Leads to final stages only (Converted or Closed Lost).</description>
+    <errorConditionFormula>AND(
+   $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+   ISPICKVAL(PRIORVALUE(Status), &quot;Referred&quot;),
+   NOT(ISPICKVAL(Status, &quot;Converted&quot;)),
+   NOT(ISPICKVAL(Status, &quot;Closed Lost&quot;))
+)</errorConditionFormula>
+    <errorMessage>Invalid status change. Once &quot;Referred&quot;, the Lead can only be &quot;Converted&quot; or marked as &quot;Closed Lost&quot;.</errorMessage>
+</ValidationRule>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ListView xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>First_Time_Buyer_Queue_Lead</fullName>
+    <filterScope>Queue</filterScope>
+    <label>First-Time Buyer Queue</label>
+    <queue>First_Time_Buyer_Queue</queue>
+    <sharedTo>
+        <allInternalUsers></allInternalUsers>
+    </sharedTo>
+</ListView>

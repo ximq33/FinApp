@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Status_Lock_Final_Stages</fullName>
+    <active>true</active>
+    <description>Prevents any further edits to the Lead record once it has reached &quot;Converted&quot; or &quot;Closed Lost&quot;.</description>
+    <errorConditionFormula>AND(
+   $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
+   OR(
+      ISPICKVAL(PRIORVALUE(Status), &quot;Converted&quot;),
+      ISPICKVAL(PRIORVALUE(Status), &quot;Closed Lost&quot;)
+   ),
+   NOT(ISNEW())
+)</errorConditionFormula>
+    <errorMessage>This record is locked. Leads in &quot;Converted&quot; or &quot;Closed Lost&quot; status cannot be edited.</errorMessage>
+</ValidationRule>
