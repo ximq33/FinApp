@@ -1,0 +1,31 @@
+<template>
+    <lightning-card title="Remortgage Calculator" icon-name="custom:custom40">
+        <div class="slds-p-around_medium">
+            <!-- Pole Imię -->
+            <lightning-input 
+                label="Your Name" 
+                name="firstName" 
+                value={firstName} 
+                onchange={handleInputChange}>
+            </lightning-input>
+
+            <!-- Pole Kwota Kredytu -->
+            <lightning-input 
+                type="number" 
+                label="Desired Loan Amount" 
+                name="loanAmount" 
+                formatter="currency" 
+                onchange={handleInputChange}>
+            </lightning-input>
+
+            <div class="slds-m-top_medium">
+                <p>Preview: {firstName} wants to borrow {loanAmount} USD.</p>
+                <lightning-button 
+                    label="Submit Application" 
+                    variant="brand" 
+                    onclick={handleButtonClick}>
+                </lightning-button>
+            </div>
+        </div>
+    </lightning-card>
+</template>
