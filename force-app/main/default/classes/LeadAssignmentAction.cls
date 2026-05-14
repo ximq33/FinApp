@@ -1,5 +1,5 @@
 @SuppressWarnings('PMD.ApexCRUDViolation')
-public class LeadAssignmentAction {
+public class LeadAssignmentAction { // TODO add "sharing"  doczytaj z dokumentacji (with sharing lub without sharing lub inherited sharing)
     
     @InvocableMethod(label='Run Lead Assignment Rules' description='Wywołuje domyślne Assignment Rules dla przekazanych Leadów')
     public static void assignLeads(List<Id> leadIds) {
