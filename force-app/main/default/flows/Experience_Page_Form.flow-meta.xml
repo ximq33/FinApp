@@ -1,5 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <actionCalls>
+        <name>Lead_Assigment_Rule_Apex_Method</name>
+        <label>Lead Assigment Rule Apex Method</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>LeadAssignmentAction</actionName>
+        <actionType>apex</actionType>
+        <connector>
+            <targetReference>Message</targetReference>
+        </connector>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>leadIds</name>
+            <value>
+                <elementReference>New_Lead.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>LeadAssignmentAction</nameSegment>
+        <offset>0</offset>
+    </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <customProperties>
@@ -51,7 +71,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Message</targetReference>
+            <targetReference>Lead_Assigment_Rule_Apex_Method</targetReference>
         </connector>
         <inputAssignments>
             <field>Company</field>
@@ -62,7 +82,13 @@
         <inputAssignments>
             <field>Deposit_Amount__c</field>
             <value>
-                <elementReference>Deposit_amount</elementReference>
+                <elementReference>Deposit_Amount</elementReference>
+            </value>
+        </inputAssignments>
+        <inputAssignments>
+            <field>Email</field>
+            <value>
+                <elementReference>email.value</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -74,7 +100,7 @@
         <inputAssignments>
             <field>First_Time_Buyer_Grant__c</field>
             <value>
-                <elementReference>First_time_buyer_grant</elementReference>
+                <elementReference>First_Time_Buyer_Grant</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -86,7 +112,7 @@
         <inputAssignments>
             <field>Property_Value__c</field>
             <value>
-                <elementReference>Property_value</elementReference>
+                <elementReference>Property_Value</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -136,70 +162,6 @@
         <showHeader>false</showHeader>
     </screens>
     <screens>
-        <name>Mortgage_Details</name>
-        <label>Mortgage Details</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>true</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>true</allowPause>
-        <connector>
-            <targetReference>New_Lead</targetReference>
-        </connector>
-        <fields>
-            <name>Property_value</name>
-            <dataType>Currency</dataType>
-            <fieldText>Property value</fieldText>
-            <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isRequired>false</isRequired>
-            <scale>0</scale>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <fields>
-            <name>Deposit_amount</name>
-            <dataType>Currency</dataType>
-            <fieldText>Deposit amount</fieldText>
-            <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isRequired>false</isRequired>
-            <scale>0</scale>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <fields>
-            <name>First_time_buyer_grant</name>
-            <dataType>Boolean</dataType>
-            <fieldText>First-time buyer grant</fieldText>
-            <fieldType>InputField</fieldType>
-            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
-            <isRequired>true</isRequired>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <showFooter>true</showFooter>
-        <showHeader>false</showHeader>
-    </screens>
-    <screens>
         <name>Personal_Info</name>
         <label>Personal Info</label>
         <locationX>0</locationX>
@@ -208,7 +170,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>Mortgage_Details</targetReference>
+            <targetReference>New_Lead</targetReference>
         </connector>
         <fields>
             <name>FirstName</name>
@@ -292,6 +254,56 @@
             <name>PESEL</name>
             <dataType>String</dataType>
             <fieldText>PESEL</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>true</isRequired>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Property_Value</name>
+            <dataType>Currency</dataType>
+            <fieldText>Property Value</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <scale>0</scale>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Deposit_Amount</name>
+            <dataType>Currency</dataType>
+            <fieldText>Deposit Amount</fieldText>
+            <fieldType>InputField</fieldType>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
+            <isRequired>false</isRequired>
+            <scale>0</scale>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>First_Time_Buyer_Grant</name>
+            <dataType>Boolean</dataType>
+            <fieldText>First-Time Buyer Grant</fieldText>
             <fieldType>InputField</fieldType>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
