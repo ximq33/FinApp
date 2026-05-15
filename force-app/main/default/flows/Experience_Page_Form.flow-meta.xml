@@ -118,7 +118,7 @@
         <inputAssignments>
             <field>RecordTypeId</field>
             <value>
-                <stringValue>012WU00000BIH2TYAX</stringValue>
+                <elementReference>Record_Type.Id</elementReference>
             </value>
         </inputAssignments>
         <inputAssignments>
@@ -136,7 +136,29 @@
         <object>Lead</object>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordCreates>
-    <runInMode>SystemModeWithoutSharing</runInMode>
+    <recordLookups>
+        <name>Record_Type</name>
+        <label>Record Type</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>New_Lead</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>First_Time_Buyer</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>RecordType</object>
+        <queriedFields>Id</queriedFields>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <runInMode>DefaultMode</runInMode>
     <screens>
         <name>Message</name>
         <label>Message</label>
@@ -170,7 +192,7 @@
         <allowFinish>true</allowFinish>
         <allowPause>true</allowPause>
         <connector>
-            <targetReference>New_Lead</targetReference>
+            <targetReference>Record_Type</targetReference>
         </connector>
         <fields>
             <name>FirstName</name>
