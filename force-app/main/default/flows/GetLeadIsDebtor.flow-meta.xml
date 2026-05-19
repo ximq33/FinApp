@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Action_1</name>
-        <label>Action 1</label>
+        <name>Call_KRS_API</name>
+        <label>Call KRS API</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <actionName>KRSmock.Get Lead Is Debtor</actionName>
@@ -17,7 +17,7 @@
         <inputParameters>
             <name>pesel</name>
             <value>
-                <elementReference>This_Lead.PESEL__c</elementReference>
+                <elementReference>recordId.PESEL__c</elementReference>
             </value>
         </inputParameters>
         <nameSegment>KRSmock.Get Lead Is Debtor</nameSegment>
@@ -27,35 +27,44 @@
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Assigned_ID_and_date</name>
-        <label>Assigned ID and date</label>
+        <name>Assign_False</name>
+        <label>Assign False</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>LeadToUpdate.Id</assignToReference>
+            <assignToReference>recordId.Is_Debtor__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <elementReference>recordId</elementReference>
+                <booleanValue>false</booleanValue>
             </value>
         </assignmentItems>
+        <connector>
+            <targetReference>False_message</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>Assign_Last_Debt_Check_Date</name>
+        <label>Assign Last Debt Check Date</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>LeadToUpdate.Last_Debt_Check__c</assignToReference>
+            <assignToReference>recordId.Last_Debt_Check__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <elementReference>$Flow.CurrentDateTime</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>Set_Last_Debt_Check_Date</targetReference>
+            <targetReference>Update_Record</targetReference>
         </connector>
     </assignments>
     <assignments>
-        <name>AssignTrueToDebtor</name>
-        <label>AssignTrueToDebtor</label>
+        <name>Assign_True</name>
+        <label>Assign True</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
-            <assignToReference>LeadToUpdate.Is_Debtor__c</assignToReference>
+            <assignToReference>recordId.Is_Debtor__c</assignToReference>
             <operator>Assign</operator>
             <value>
                 <booleanValue>true</booleanValue>
@@ -77,21 +86,21 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
-            <targetReference>Assigned_ID_and_date</targetReference>
+            <targetReference>Assign_Last_Debt_Check_Date</targetReference>
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>True</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Action_1.responseCode</leftValueReference>
+                <leftValueReference>Call_KRS_API.responseCode</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <numberValue>200.0</numberValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>AssignTrueToDebtor</targetReference>
+                <targetReference>Assign_True</targetReference>
             </connector>
             <label>True</label>
         </rules>
@@ -106,19 +115,19 @@
         </defaultConnector>
         <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
-            <name>Assign_False</name>
+            <name>False</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Action_1.responseCode</leftValueReference>
+                <leftValueReference>Call_KRS_API.responseCode</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
                     <numberValue>404.0</numberValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Set_False</targetReference>
+                <targetReference>Assign_False</targetReference>
             </connector>
-            <label>Assign False</label>
+            <label>False</label>
         </rules>
     </decisions>
     <environments>Default</environments>
@@ -143,57 +152,12 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
-    <recordLookups>
-        <name>This_Lead</name>
-        <label>This</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
-        <connector>
-            <targetReference>Action_1</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </filters>
-        <getFirstRecordOnly>true</getFirstRecordOnly>
-        <object>Lead</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordLookups>
     <recordUpdates>
-        <name>Set_False</name>
-        <label>Set False</label>
+        <name>Update_Record</name>
+        <label>Update Record</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <connector>
-            <targetReference>False_message</targetReference>
-        </connector>
-        <filterLogic>and</filterLogic>
-        <filters>
-            <field>Id</field>
-            <operator>EqualTo</operator>
-            <value>
-                <elementReference>recordId</elementReference>
-            </value>
-        </filters>
-        <inputAssignments>
-            <field>Is_Debtor__c</field>
-            <value>
-                <booleanValue>false</booleanValue>
-            </value>
-        </inputAssignments>
-        <object>Lead</object>
-    </recordUpdates>
-    <recordUpdates>
-        <name>Set_Last_Debt_Check_Date</name>
-        <label>Set Last Debt Check Date</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <inputReference>LeadToUpdate</inputReference>
+        <inputReference>recordId</inputReference>
     </recordUpdates>
     <screens>
         <name>error_display</name>
@@ -205,11 +169,11 @@
         <allowPause>false</allowPause>
         <connector>
             <isGoTo>true</isGoTo>
-            <targetReference>Set_Last_Debt_Check_Date</targetReference>
+            <targetReference>Assign_Last_Debt_Check_Date</targetReference>
         </connector>
         <fields>
             <name>Error_Message</name>
-            <fieldText>&lt;p&gt;{!Action_1.defaultExc}. Please contact your administrator.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;{!Call_KRS_API.defaultExc}. Please contact your administrator.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -234,11 +198,11 @@
         <allowPause>false</allowPause>
         <connector>
             <isGoTo>true</isGoTo>
-            <targetReference>Set_Last_Debt_Check_Date</targetReference>
+            <targetReference>Assign_Last_Debt_Check_Date</targetReference>
         </connector>
         <fields>
             <name>False_display_text</name>
-            <fieldText>&lt;p&gt;{!This_Lead.Name} is &lt;u style=&quot;font-size: 14px;&quot;&gt;not&lt;/u&gt; on KRS debtor list.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;{!recordId.Name} is &lt;u style=&quot;font-size: 14px;&quot;&gt;not&lt;/u&gt; on KRS debtor list.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -262,11 +226,11 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <targetReference>Assigned_ID_and_date</targetReference>
+            <targetReference>Assign_Last_Debt_Check_Date</targetReference>
         </connector>
         <fields>
             <name>True_display_text</name>
-            <fieldText>&lt;p&gt;{!This_Lead.Name} is on KRS debtor list.&lt;/p&gt;</fieldText>
+            <fieldText>&lt;p&gt;{!recordId.Name} is on KRS debtor list.&lt;/p&gt;</fieldText>
             <fieldType>DisplayText</fieldType>
             <styleProperties>
                 <verticalAlignment>
@@ -285,12 +249,19 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>This_Lead</targetReference>
+            <targetReference>Call_KRS_API</targetReference>
         </connector>
     </start>
-    <status>Draft</status>
+    <status>Active</status>
     <variables>
-        <name>LeadToUpdate</name>
+        <name>IsDebtor</name>
+        <dataType>Boolean</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+    <variables>
+        <name>Record_To_Update</name>
         <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
@@ -299,9 +270,10 @@
     </variables>
     <variables>
         <name>recordId</name>
-        <dataType>String</dataType>
+        <dataType>SObject</dataType>
         <isCollection>false</isCollection>
         <isInput>true</isInput>
         <isOutput>false</isOutput>
+        <objectType>Lead</objectType>
     </variables>
 </Flow>

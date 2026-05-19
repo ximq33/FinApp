@@ -1,27 +1,221 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Lead_Assigment_Rule_Apex_Method</name>
-        <label>Lead Assigment Rule Apex Method</label>
+        <name>Insert_Lead_Action</name>
+        <label>Insert Lead Action</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>LeadAssignmentAction</actionName>
+        <actionName>LeadInsertAction</actionName>
         <actionType>apex</actionType>
         <connector>
             <targetReference>Message</targetReference>
         </connector>
-        <flowTransactionModel>Automatic</flowTransactionModel>
+        <faultConnector>
+            <targetReference>Send_Create_Lead_Error_Message</targetReference>
+        </faultConnector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
-            <name>leadIds</name>
+            <name>leadsToInsert</name>
             <value>
-                <elementReference>New_Lead.Id</elementReference>
+                <elementReference>Lead_Variable</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>LeadAssignmentAction</nameSegment>
+        <nameSegment>LeadInsertAction</nameSegment>
         <offset>0</offset>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Create_Lead_Error_Message</name>
+        <label>Send Create Lead Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Create_Lead_Errror_Message</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value>
+                <collectionElements>
+                    <stringValue>ximonq@gmail.com</stringValue>
+                </collectionElements>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>DefaultWorkflowUser</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Error on Experience Page Form</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
+    </actionCalls>
+    <actionCalls>
+        <name>Send_Get_Record_Type_Error_Message</name>
+        <label>Send Get Record Type Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <actionName>emailSimple</actionName>
+        <actionType>emailSimple</actionType>
+        <connector>
+            <targetReference>Get_Record_Type_Error_Message</targetReference>
+        </connector>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
+        <inputParameters>
+            <name>recipientAddresses</name>
+            <value>
+                <collectionElements>
+                    <stringValue>ximonq@gmail.com</stringValue>
+                </collectionElements>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>senderType</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>DefaultWorkflowUser</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>composeEmailContent</name>
+            <value>
+                <stringValue>True</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailSubject</name>
+            <value>
+                <stringValue>Error on Experience Page Form</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>emailBody</name>
+            <value>
+                <inputConfiguratorMode>Custom</inputConfiguratorMode>
+                <stringValue>&lt;p&gt;{!$Flow.FaultMessage}&lt;/p&gt;</stringValue>
+            </value>
+        </inputParameters>
+        <inputParameters>
+            <name>relatedRecordId</name>
+        </inputParameters>
+        <nameSegment>emailSimple</nameSegment>
+        <offset>0</offset>
+        <versionString>2.0.1</versionString>
     </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
+    <assignments>
+        <name>Assign_Lead_Variable</name>
+        <label>Assign Lead Variable</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.FirstName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>FirstName.firstName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.LastName</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>LastName.lastName</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.First_Time_Buyer_Grant__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>First_Time_Buyer_Grant</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.PESEL__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PESEL</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.Email</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>email.value</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.Company</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Flow Record</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.Deposit_Amount__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Deposit_Amount</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.Property_Value__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Property_Value</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.RecordTypeId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Record_Type.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.Tracking_Source__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>TrackingSource</elementReference>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>Lead_Variable.Social_Media_Tracking__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>Social_Media_Tracking</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>Insert_Lead_Action</targetReference>
+        </connector>
+    </assignments>
     <customProperties>
         <name>ScreenProgressIndicator</name>
         <value>
@@ -65,77 +259,6 @@
         </value>
     </processMetadataValues>
     <processType>Flow</processType>
-    <recordCreates>
-        <name>New_Lead</name>
-        <label>New Lead</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <connector>
-            <targetReference>Lead_Assigment_Rule_Apex_Method</targetReference>
-        </connector>
-        <inputAssignments>
-            <field>Company</field>
-            <value>
-                <stringValue>Flow Lead</stringValue>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Deposit_Amount__c</field>
-            <value>
-                <elementReference>Deposit_Amount</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Email</field>
-            <value>
-                <elementReference>email.value</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>FirstName</field>
-            <value>
-                <elementReference>FirstName.firstName</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>First_Time_Buyer_Grant__c</field>
-            <value>
-                <elementReference>First_Time_Buyer_Grant</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>LastName</field>
-            <value>
-                <elementReference>LastName.lastName</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Property_Value__c</field>
-            <value>
-                <elementReference>Property_Value</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>RecordTypeId</field>
-            <value>
-                <elementReference>Record_Type.Id</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Social_Media_Tracking__c</field>
-            <value>
-                <elementReference>Social_Media_Tracking</elementReference>
-            </value>
-        </inputAssignments>
-        <inputAssignments>
-            <field>Tracking_Source__c</field>
-            <value>
-                <elementReference>TrackingSource</elementReference>
-            </value>
-        </inputAssignments>
-        <object>Lead</object>
-        <storeOutputAutomatically>true</storeOutputAutomatically>
-    </recordCreates>
     <recordLookups>
         <name>Record_Type</name>
         <label>Record Type</label>
@@ -143,8 +266,11 @@
         <locationY>0</locationY>
         <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
         <connector>
-            <targetReference>New_Lead</targetReference>
+            <targetReference>Assign_Lead_Variable</targetReference>
         </connector>
+        <faultConnector>
+            <targetReference>Send_Get_Record_Type_Error_Message</targetReference>
+        </faultConnector>
         <filterLogic>and</filterLogic>
         <filters>
             <field>DeveloperName</field>
@@ -159,6 +285,200 @@
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </recordLookups>
     <runInMode>DefaultMode</runInMode>
+    <screens>
+        <name>Create_Lead_Errror_Message</name>
+        <label>Create Lead Errror Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <backButtonLabel>OK</backButtonLabel>
+        <fields>
+            <name>Create_Lead_Errror_Message_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Create_Lead_Errror_Message_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Create_Lead_Errror_Message_Section2</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Create_Lead_Errror_Message_Section2_Column1</name>
+                <fieldType>Region</fieldType>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Create_Lead_Errror_Message_Section2_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Copy_1_of_Error_Message</name>
+                    <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 22px; color: rgb(0, 0, 0);&quot;&gt;Something went wrong. Please try again later or contact us.&lt;/span&gt;&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>middle</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Create_Lead_Errror_Message_Section2_Column3</name>
+                <fieldType>Region</fieldType>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
+    <screens>
+        <name>Get_Record_Type_Error_Message</name>
+        <label>Get Record Type Error Message</label>
+        <locationX>0</locationX>
+        <locationY>0</locationY>
+        <allowBack>true</allowBack>
+        <allowFinish>false</allowFinish>
+        <allowPause>false</allowPause>
+        <backButtonLabel>OK</backButtonLabel>
+        <fields>
+            <name>Get_Record_Type_Error_Message_Section1</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Get_Record_Type_Error_Message_Section1_Column1</name>
+                <fieldType>Region</fieldType>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>12</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <fields>
+            <name>Get_Record_Type_Error_Message_Section2</name>
+            <fieldType>RegionContainer</fieldType>
+            <fields>
+                <name>Get_Record_Type_Error_Message_Section2_Column1</name>
+                <fieldType>Region</fieldType>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Get_Record_Type_Error_Message_Section2_Column2</name>
+                <fieldType>Region</fieldType>
+                <fields>
+                    <name>Error_Message</name>
+                    <fieldText>&lt;p&gt;&lt;span style=&quot;font-size: 22px; color: rgb(0, 0, 0);&quot;&gt;Something went wrong. Please try again later or contact us.&lt;/span&gt;&lt;/p&gt;</fieldText>
+                    <fieldType>DisplayText</fieldType>
+                    <styleProperties>
+                        <verticalAlignment>
+                            <stringValue>middle</stringValue>
+                        </verticalAlignment>
+                        <width>
+                            <stringValue>12</stringValue>
+                        </width>
+                    </styleProperties>
+                </fields>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>6</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <fields>
+                <name>Get_Record_Type_Error_Message_Section2_Column3</name>
+                <fieldType>Region</fieldType>
+                <inputParameters>
+                    <name>width</name>
+                    <value>
+                        <stringValue>3</stringValue>
+                    </value>
+                </inputParameters>
+                <isRequired>false</isRequired>
+            </fields>
+            <isRequired>false</isRequired>
+            <regionContainerType>SectionWithoutHeader</regionContainerType>
+            <styleProperties>
+                <verticalAlignment>
+                    <stringValue>top</stringValue>
+                </verticalAlignment>
+                <width>
+                    <stringValue>12</stringValue>
+                </width>
+            </styleProperties>
+        </fields>
+        <showFooter>true</showFooter>
+        <showHeader>false</showHeader>
+    </screens>
     <screens>
         <name>Message</name>
         <label>Message</label>
@@ -199,15 +519,15 @@
             <extensionName>flowruntime:name</extensionName>
             <fieldType>ComponentInstance</fieldType>
             <inputParameters>
-                <name>label</name>
-                <value>
-                    <stringValue></stringValue>
-                </value>
-            </inputParameters>
-            <inputParameters>
                 <name>fieldsToDisplayList</name>
                 <value>
                     <stringValue>firstName</stringValue>
+                </value>
+            </inputParameters>
+            <inputParameters>
+                <name>label</name>
+                <value>
+                    <stringValue></stringValue>
                 </value>
             </inputParameters>
             <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
@@ -350,6 +670,14 @@
         </connector>
     </start>
     <status>Active</status>
+    <variables>
+        <name>Lead_Variable</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>true</isOutput>
+        <objectType>Lead</objectType>
+    </variables>
     <variables>
         <name>sourcedBy</name>
         <dataType>String</dataType>
