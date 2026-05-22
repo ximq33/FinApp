@@ -1,23 +1,24 @@
-import { LightningElement, track } from 'lwc';
+import { LightningElement } from 'lwc';
+import createLeadWithRules from '@salesforce/apex/RemortgageController.createLeadWithRules';
 
 export default class RemortgageForm extends LightningElement {
+    isSubmitted = false; 
+    errorMessage = '';
 
-    @track firstName = '';
-    @track loanAmount = 0;
-
+    handleSubmit(event) {
     
-    handleInputChange(event) {
-        const fieldName = event.target.name;
-        const value = event.target.value;
+        event.preventDefault(); 
+        
+        const fields = event.detail.fields;
 
-        if (fieldName === 'firstName') {
-            this.firstName = value;
-        } else if (fieldName === 'loanAmount') {
-            this.loanAmount = value;
-        }
-    }
-
-    handleButtonClick() {
-        alert('Cześć ' + this.firstName + '! Chcesz pożyczyć: ' + this.loanAmount);
+        createLeadWithRules({ newLead: fields })
+            .then(() => {
+                this.isSubmitted = true;
+                this.errorMessage = '';
+            })
+            .catch(error => {
+                this.errorMessage = error.body.message;
+                console.error('Error while saving: ', error);
+            });
     }
 }
