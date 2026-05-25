@@ -2,14 +2,14 @@
 <ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Lead_Status_Restrict_From_InProgress</fullName>
     <active>true</active>
-    <description>Restricts the transitions from &quot;In Progress&quot; to only allow &quot;Nurtured&quot;, &quot;Referred&quot;, or &quot;Closed Lost&quot;.</description>
+    <description>Restricts the transitions from &quot;In Progress&quot; to only allow &quot;Nurtured&quot;, &quot;Being Referred&quot;, or &quot;Closed Lost&quot;.</description>
     <errorConditionFormula>AND(
    $Profile.Name &lt;&gt; &quot;System Administrator&quot;,
    ISPICKVAL(PRIORVALUE(Status), &quot;In Progress&quot;),
    NOT(ISPICKVAL(Status, &quot;Nurtured&quot;)),
-   NOT(ISPICKVAL(Status, &quot;Referred&quot;)),
+   NOT(ISPICKVAL(Status, &quot;Being Referred&quot;)),
    NOT(ISPICKVAL(Status, &quot;Closed Lost&quot;))
 )</errorConditionFormula>
     <errorDisplayField>Status</errorDisplayField>
-    <errorMessage>Invalid status change. From &quot;In Progress&quot;, you can only move the Lead to &quot;Nurtured&quot;, &quot;Referred&quot;, or &quot;Closed Lost&quot;.</errorMessage>
+    <errorMessage>Invalid status change. From &quot;In Progress&quot;, you can only move the Lead to &quot;Nurtured&quot;, &quot;Being Referred&quot;, or &quot;Closed Lost&quot;.</errorMessage>
 </ValidationRule>
