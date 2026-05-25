@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lead_Status_Restrict_From_New</fullName>
+    <active>true</active>
+    <description>Ensures that Leads in &apos;New&apos; status can only be moved to &apos;In Progress&apos; or &apos;Closed Lost&apos;.</description>
+    <errorConditionFormula>AND(
+    ISPICKVAL(PRIORVALUE(Status), &quot;New&quot;),
+    ISCHANGED(Status),
+    NOT(ISPICKVAL(Status, &quot;In Progress&quot;)),
+    NOT(ISPICKVAL(Status, &quot;Closed Lost&quot;))
+)</errorConditionFormula>
+    <errorMessage>From &apos;New&apos;, you can only move the Lead to &apos;In Progress&apos; or &apos;Closed Lost&apos;.</errorMessage>
+</ValidationRule>
