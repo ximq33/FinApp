@@ -3,6 +3,10 @@
     <fullName>First-Time Buyer</fullName>
     <isActive>true</isActive>
     <values>
+        <fullName>Being Referred</fullName>
+        <default>false</default>
+    </values>
+    <values>
         <fullName>Closed Lost</fullName>
         <default>false</default>
     </values>
