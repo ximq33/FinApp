@@ -11,6 +11,10 @@
         <default>false</default>
     </values>
     <values>
+        <fullName>Conversion Failed</fullName>
+        <default>false</default>
+    </values>
+    <values>
         <fullName>Converted</fullName>
         <default>false</default>
     </values>
