@@ -1,45 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Flow xmlns="http://soap.sforce.com/2006/04/metadata">
     <actionCalls>
-        <name>Call_KRS_API</name>
-        <label>Call KRS API</label>
+        <name>Check_Debt_Status_via_API</name>
+        <label>Check Debt Status via API</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
-        <actionName>KRSmock.Get Lead Is Debtor</actionName>
-        <actionType>externalService</actionType>
+        <actionName>DebtCheckService</actionName>
+        <actionType>apex</actionType>
         <connector>
             <targetReference>Assign_Is_Debtor</targetReference>
         </connector>
-        <faultConnector>
-            <targetReference>Assign_Is_Debtor_False</targetReference>
-        </faultConnector>
-        <flowTransactionModel>NewTransaction</flowTransactionModel>
+        <flowTransactionModel>Automatic</flowTransactionModel>
         <inputParameters>
-            <name>pesel</name>
+            <name>leadIds</name>
             <value>
-                <elementReference>recordId.PESEL__c</elementReference>
+                <elementReference>recordId.Id</elementReference>
             </value>
         </inputParameters>
-        <nameSegment>KRSmock.Get Lead Is Debtor</nameSegment>
+        <nameSegment>DebtCheckService</nameSegment>
         <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>66.0</apiVersion>
     <areMetricsLoggedToDataCloud>false</areMetricsLoggedToDataCloud>
     <assignments>
-        <name>Assign_False</name>
-        <label>Assign False</label>
+        <name>Assign_Is_Debtor</name>
+        <label>Assign Is Debtor</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <assignmentItems>
             <assignToReference>recordId.Is_Debtor__c</assignToReference>
             <operator>Assign</operator>
             <value>
-                <booleanValue>false</booleanValue>
+                <elementReference>Check_Debt_Status_via_API</elementReference>
             </value>
         </assignmentItems>
         <connector>
-            <targetReference>False_message</targetReference>
+            <targetReference>Show_Message</targetReference>
         </connector>
     </assignments>
     <assignments>
@@ -58,22 +55,6 @@
             <targetReference>Update_Record</targetReference>
         </connector>
     </assignments>
-    <assignments>
-        <name>Assign_True</name>
-        <label>Assign True</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <assignmentItems>
-            <assignToReference>recordId.Is_Debtor__c</assignToReference>
-            <operator>Assign</operator>
-            <value>
-                <booleanValue>true</booleanValue>
-            </value>
-        </assignmentItems>
-        <connector>
-            <targetReference>True_message</targetReference>
-        </connector>
-    </assignments>
     <customProperties>
         <name>ScreenProgressIndicator</name>
         <value>
@@ -81,8 +62,8 @@
         </value>
     </customProperties>
     <decisions>
-        <name>Assign_Is_Debtor</name>
-        <label>Assign Is Debtor</label>
+        <name>Show_Message</name>
+        <label>Show Message</label>
         <locationX>0</locationX>
         <locationY>0</locationY>
         <defaultConnector>
@@ -93,39 +74,29 @@
             <name>True</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Call_KRS_API.responseCode</leftValueReference>
+                <leftValueReference>Check_Debt_Status_via_API</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <numberValue>200.0</numberValue>
+                    <booleanValue>true</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Assign_True</targetReference>
+                <targetReference>True_message</targetReference>
             </connector>
             <label>True</label>
         </rules>
-    </decisions>
-    <decisions>
-        <name>Assign_Is_Debtor_False</name>
-        <label>Assign Is Debtor False</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <defaultConnector>
-            <targetReference>error_display</targetReference>
-        </defaultConnector>
-        <defaultConnectorLabel>Default Outcome</defaultConnectorLabel>
         <rules>
             <name>False</name>
             <conditionLogic>and</conditionLogic>
             <conditions>
-                <leftValueReference>Call_KRS_API.responseCode</leftValueReference>
+                <leftValueReference>Check_Debt_Status_via_API</leftValueReference>
                 <operator>EqualTo</operator>
                 <rightValue>
-                    <numberValue>404.0</numberValue>
+                    <booleanValue>false</booleanValue>
                 </rightValue>
             </conditions>
             <connector>
-                <targetReference>Assign_False</targetReference>
+                <targetReference>False_message</targetReference>
             </connector>
             <label>False</label>
         </rules>
@@ -160,35 +131,6 @@
         <inputReference>recordId</inputReference>
     </recordUpdates>
     <screens>
-        <name>error_display</name>
-        <label>error display</label>
-        <locationX>0</locationX>
-        <locationY>0</locationY>
-        <allowBack>false</allowBack>
-        <allowFinish>true</allowFinish>
-        <allowPause>false</allowPause>
-        <connector>
-            <isGoTo>true</isGoTo>
-            <targetReference>Assign_Last_Debt_Check_Date</targetReference>
-        </connector>
-        <fields>
-            <name>Error_Message</name>
-            <fieldText>&lt;p&gt;{!Call_KRS_API.defaultExc}. Please contact your administrator.&lt;/p&gt;</fieldText>
-            <fieldType>DisplayText</fieldType>
-            <styleProperties>
-                <verticalAlignment>
-                    <stringValue>top</stringValue>
-                </verticalAlignment>
-                <width>
-                    <stringValue>12</stringValue>
-                </width>
-            </styleProperties>
-        </fields>
-        <nextOrFinishButtonLabel>OK</nextOrFinishButtonLabel>
-        <showFooter>true</showFooter>
-        <showHeader>true</showHeader>
-    </screens>
-    <screens>
         <name>False_message</name>
         <label>False message</label>
         <locationX>0</locationX>
@@ -197,7 +139,6 @@
         <allowFinish>true</allowFinish>
         <allowPause>false</allowPause>
         <connector>
-            <isGoTo>true</isGoTo>
             <targetReference>Assign_Last_Debt_Check_Date</targetReference>
         </connector>
         <fields>
@@ -249,7 +190,7 @@
         <locationX>0</locationX>
         <locationY>0</locationY>
         <connector>
-            <targetReference>Call_KRS_API</targetReference>
+            <targetReference>Check_Debt_Status_via_API</targetReference>
         </connector>
     </start>
     <status>Active</status>
@@ -258,7 +199,7 @@
         <dataType>Boolean</dataType>
         <isCollection>false</isCollection>
         <isInput>false</isInput>
-        <isOutput>false</isOutput>
+        <isOutput>true</isOutput>
     </variables>
     <variables>
         <name>Record_To_Update</name>
