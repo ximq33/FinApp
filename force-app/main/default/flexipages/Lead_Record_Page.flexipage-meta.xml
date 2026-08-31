@@ -31,6 +31,16 @@
                             </visibilityRule>
                         </valueListItems>
                         <valueListItems>
+                            <value>Lead.Refer_Lead</value>
+                            <visibilityRule>
+                                <criteria>
+                                    <leftValue>{!Record.Status}</leftValue>
+                                    <operator>EQUAL</operator>
+                                    <rightValue>In Progress</rightValue>
+                                </criteria>
+                            </visibilityRule>
+                        </valueListItems>
+                        <valueListItems>
                             <value>FeedItem.ContentPost</value>
                         </valueListItems>
                         <valueListItems>

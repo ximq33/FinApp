@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>Lock_Referred_Leads_For_Users</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(ISNEW()),
+    ISPICKVAL(PRIORVALUE(Status), &quot;Referred&quot;),
+    NOT($Permission.MDM_Integration_User),
+    $Profile.Name &lt;&gt; &quot;System Administrator&quot;
+)</errorConditionFormula>
+    <errorMessage>This Lead is currently locked and managed by the MDM system.</errorMessage>
+</ValidationRule>

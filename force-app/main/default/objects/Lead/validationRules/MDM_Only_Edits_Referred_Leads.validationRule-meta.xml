@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ValidationRule xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>MDM_Only_Edits_Referred_Leads</fullName>
+    <active>true</active>
+    <errorConditionFormula>AND(
+    NOT(ISNEW()),
+    $Permission.MDM_Integration_User,
+    NOT(ISPICKVAL(PRIORVALUE(Status), &quot;Referred&quot;))
+)</errorConditionFormula>
+    <errorMessage>MDM System is only allowed to edit Leads in &apos;Referred&apos; status.</errorMessage>
+</ValidationRule>
